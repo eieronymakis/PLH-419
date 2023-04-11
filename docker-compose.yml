@@ -1,0 +1,51 @@
+version: '3'
+services:
+
+  # auth_svc:
+  #   build: ./AuthenticationService
+  #   command: "npx nodemon index.js"
+  #   container_name: auth_svc
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - auth_svc_local:/auth_svc
+  #     - auth_svc:/auth_svc/node_modules
+  #   networks:
+  #     - net0
+
+
+  auth_svc_db:
+    image: mysql
+    container_name: auth_svc_db
+    hostname: auth_svc_db
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=xyz123"
+    networks:
+      - net0
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+
+volumes:
+  mysql-data:
+    name: auth_svc_db_volume
+  auth_svc_local:
+    name: auth_svc_volume_local
+    driver: local
+    driver_opts:
+      type: none
+      device: ./AuthenticationService
+      o: bind
+  auth_svc:
+    name: auth_svc_volume
+
+  
+networks:
+  net0:
+    driver : bridge
+
+
