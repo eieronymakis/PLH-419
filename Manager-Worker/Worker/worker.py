@@ -22,7 +22,18 @@ while True:
 
     # Call the function from the Python code string
     intermediate_results = map_function(input)
+
+    print('-------------------------------------------')
+    print('Mapper Output')
+    print('-------------------------------------------')
+    print(intermediate_results)
+
     final_results = reduce_function(intermediate_results)
+
+    print('-------------------------------------------')
+    print('Reducer Output')
+    print('-------------------------------------------')
+    print(final_results)
 
     end = time.time()
 
