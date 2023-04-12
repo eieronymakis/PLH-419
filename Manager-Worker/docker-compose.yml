@@ -1,0 +1,28 @@
+version: '3'
+services:
+
+  worker:
+    build: ./Worker
+    container_name: worker
+    image: worker:latest
+    volumes:
+      - ./Worker:/Worker
+    networks:
+      - net0
+
+  manager:
+    build: ./Manager
+    container_name: manager
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./Manager:/Manager
+    networks:
+      - net0
+
+networks:
+  net0:
+    driver : bridge
+
+
