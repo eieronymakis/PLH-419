@@ -4,7 +4,7 @@
 containers=()
 
 # Loop through all containers with names starting with "worker_svc-"
-for container_name in $(sudo docker ps --format '{{.Names}}' | grep 'worker_svc-'); do
+for container_name in $(sudo docker ps --format '{{.Names}}' | grep 'worker-'); do
     # Get the container IP address
     container_ip=$(sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$container_name")
 

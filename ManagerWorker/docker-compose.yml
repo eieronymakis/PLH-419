@@ -3,10 +3,14 @@ services:
 
   worker:
     build: ./Worker
-    container_name: worker
     image: worker:latest
+    deploy:
+      mode: replicated
+      replicas: 4
     volumes:
       - ./Worker:/Worker
+      - 'shared:/Worker/jobs'
+      - './Shared:/Worker/jobs'
     networks:
       - net0
 
@@ -18,8 +22,14 @@ services:
     tty: true
     volumes:
       - ./Manager:/Manager
+      - 'shared:/Manager/jobs'
+      - './Shared:/Manager/jobs'
     networks:
       - net0
+
+volumes:
+  shared:
+    driver: local
 
 networks:
   net0:
