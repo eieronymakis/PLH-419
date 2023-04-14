@@ -5,6 +5,10 @@ import json
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+@app.route('/', methods=['GET'])
+def root():
+    return render_template('login.html')
+
 @app.route('/worker_status', methods=['GET'])
 def get_worker_status():
     subprocess.run(['./checkLiveWorkers.sh'])
@@ -22,7 +26,7 @@ def get_worker_status():
     return response
 
 @app.route('/workers', methods=['GET'])
-def x():
+def workers():
     return render_template('workerStatus.html')
 
 if __name__ == '__main__':

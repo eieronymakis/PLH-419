@@ -1,7 +1,7 @@
 const mysql = require('mysql2')
 
 let con = mysql.createConnection({
-    host: "localhost",  
+    host: "auth_svc_db",  
     port: 3306,
     user: "root",
     database: "auth_svc",

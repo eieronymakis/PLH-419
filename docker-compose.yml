@@ -1,19 +1,27 @@
 version: '3'
 services:
-
-  # auth_svc:
-  #   build: ./AuthenticationService
-  #   command: "npx nodemon index.js"
-  #   container_name: auth_svc
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - auth_svc_local:/auth_svc
-  #     - auth_svc:/auth_svc/node_modules
-  #   networks:
-  #     - net0
-
-
+  #-----------------------------------------------
+  # Authentication Service
+  #-----------------------------------------------
+  auth_svc:
+    build: ./Authentication
+    image: auth_svc:latest
+    command: "npx nodemon index.js"
+    container_name: auth_svc
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Authentication:/app
+      - /app/node_modules
+    depends_on:
+      - auth_svc_db
+    networks:
+      net0:
+        ipv4_address: 172.25.0.5
+  #-----------------------------------------------
+  # Authentication Service Database
+  #-----------------------------------------------
   auth_svc_db:
     image: mysql
     container_name: auth_svc_db
@@ -24,28 +32,106 @@ services:
       - "3306"
     environment:
       - "MYSQL_ROOT_PASSWORD=xyz123"
+      - "MYSQL_DATABASE=auth_svc"
     networks:
-      - net0
+      net0:
+        ipv4_address: 172.25.0.6
     volumes:
       - mysql-data:/var/lib/mysql
+  #-----------------------------------------------
+  # Manager
+  #-----------------------------------------------
+  manager:
+    ports:
+      - '5050:3000'
+    build: ./Manager
+    image: manager:latest
+    container_name: manager
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./Manager:/manager
+      - 'shared:/manager/jobs'
+      - './Shared:/manager/jobs'
+    networks:
+      net0:
+        ipv4_address: 172.25.0.14
+  #-----------------------------------------------
+  # Workers
+  #-----------------------------------------------
+  worker1:
+    build: ./Worker    
+    image: worker:latest
+    container_name: worker1
+    volumes:
+      - ./Worker:/worker
+      - 'shared:/worker/jobs'
+      - './Shared:/worker/jobs'
+    depends_on:
+      - manager
+    networks:
+      net0:
+        ipv4_address: 172.25.0.10
 
+  worker2:
+    build: ./Worker    
+    image: worker:latest
+    container_name: worker2
+    volumes:
+      - ./Worker:/worker
+      - 'shared:/worker/jobs'
+      - './Shared:/worker/jobs'
+    depends_on:
+      - manager
+    networks:
+      net0:
+        ipv4_address: 172.25.0.11
 
+  worker3:
+    build: ./Worker    
+    image: worker:latest
+    container_name: worker3
+    volumes:
+      - ./Worker:/worker
+      - 'shared:/worker/jobs'
+      - './Shared:/worker/jobs'
+    depends_on:
+      - manager
+    networks:
+      net0:
+        ipv4_address: 172.25.0.12
+        
+  worker4:
+    build: ./Worker    
+    image: worker:latest
+    container_name: worker4
+    volumes:
+      - ./Worker:/worker
+      - 'shared:/worker/jobs'
+      - './Shared:/worker/jobs'
+    depends_on:
+      - manager
+    networks:
+      net0:
+        ipv4_address: 172.25.0.13
+#-----------------------------------------------
+# Volumes
+#-----------------------------------------------
 volumes:
   mysql-data:
     name: auth_svc_db_volume
-  auth_svc_local:
-    name: auth_svc_volume_local
+  shared:
     driver: local
-    driver_opts:
-      type: none
-      device: ./AuthenticationService
-      o: bind
-  auth_svc:
-    name: auth_svc_volume
-
-  
+    name: manager_workers_shared
+#-----------------------------------------------
+# Net
+#-----------------------------------------------
 networks:
   net0:
     driver : bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
 
 

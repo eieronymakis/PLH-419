@@ -7,7 +7,9 @@ RUN apt-get update && \
     apt-get install -y iputils-ping &&\
     apt-get install -y jq
 
-WORKDIR /Manager
-
 # Install numpy and pandas packages 
 RUN pip3 install zmq flask
+
+WORKDIR /manager
+
+COPY . .
