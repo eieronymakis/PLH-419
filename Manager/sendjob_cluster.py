@@ -2,20 +2,52 @@ import zmq
 import pickle
 import sys
 import json
+import os
 from os import system
 
-sys.path.append('utils')
-from split import split_file
+# Get the absolute path of the current script directory
+SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
+# Define the absolute path of the jobs directory
+JOBS_DIR = os.path.join(SCRIPT_DIR, 'jobs')
+# Define the absolute path of the IPAddresses.json file
+IP_ADDRESSES_FILE = os.path.join(SCRIPT_DIR, 'IPAddresses.json')
+# Define the absolute path of the split.py file
+SPLIT_FILE = os.path.join(SCRIPT_DIR, 'utils', 'split.py')
+# Define the absolute path of the input file
+INPUT_FILE = os.path.join(JOBS_DIR, sys.argv[2])
+
+def split_file(file_path, num_chunks):
+    with open(file_path, 'r') as f:
+        lines = f.readlines()
+
+    num_lines = len(lines)
+    lines_per_chunk = num_lines // num_chunks
+
+    files = []
+
+    basename = os.path.basename(file_path)
+    prefix = os.path.splitext(basename)[0]
+
+    for i in range(num_chunks):
+        start_idx = i * lines_per_chunk
+        end_idx = (i+1) * lines_per_chunk if i < num_chunks-1 else num_lines
+        chunk = lines[start_idx:end_idx]
+
+        with open(os.path.join(JOBS_DIR, prefix+'_chunk_'+str(i+1)+'.txt'), 'w') as f:
+            f.writelines(chunk)
+            files.append(prefix+'_chunk_'+str(i+1)+'.txt')
+
+    return files
 
 job_file_name = sys.argv[1]
 input_file_name = sys.argv[2]
 
 sockets = []
 
-with open('IPAddresses.json', 'r') as f:
+with open(IP_ADDRESSES_FILE, 'r') as f:
     IPAddresses = json.load(f)
 
-for x in IPAddresses['containers'] :
+for x in IPAddresses['containers']:
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://"+x['ip']+":5555")
@@ -24,14 +56,13 @@ for x in IPAddresses['containers'] :
 worker_index = 1
 chunk_index = 0
 
-chunk_file_names = split_file('jobs/'+input_file_name, len(IPAddresses['containers']))
+chunk_file_names = split_file(INPUT_FILE, len(IPAddresses['containers']))
 
-for s in sockets :
-
+for s in sockets:
     request_object = {
-        'job_file_name' : job_file_name,
-        'input_file_name' : chunk_file_names[chunk_index],
-        'worker_index' : worker_index
+        'job_file_name':  os.path.basename(job_file_name),
+        'input_file_name':  os.path.basename(chunk_file_names[chunk_index]),
+        'worker_index': worker_index
     }
 
     serialised_request_object = pickle.dumps(request_object)
@@ -48,10 +79,8 @@ for s in sockets :
     print('Result File Name : '+result_file_name)
     print('--------------------------------------')
 
-    worker_index+=1
-    chunk_index+=1
+    worker_index += 1
+    chunk_index += 1
 
 for chunk_name in chunk_file_names:
-    system('rm -rf ./jobs/'+chunk_name)
-
-
+    os.remove(os.path.join(JOBS_DIR, chunk_name))
