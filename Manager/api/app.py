@@ -8,6 +8,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Create a directory in a known location to save files to.
 uploads_dir = os.path.join(app.root_path, '../jobs')
+results_dir = os.path.join(app.root_path, '../results')
 
 @app.route('/', methods=['GET'])
 def root():
@@ -46,9 +47,21 @@ def upload_file():
     job_file = request.files['job_file']
     job_file.save(os.path.join(uploads_dir, job_file.filename))
     try:
-        subprocess.run(['python3', os.path.join(app.root_path, '../sendjob_cluster.py'), os.path.join(uploads_dir, job_file.filename), os.path.join(uploads_dir, input_file.filename)])
-    except:
-        print('Well shieeet')
+        result = subprocess.check_output(['python3', os.path.join(app.root_path, '../sendjob.py'), os.path.join(uploads_dir, job_file.filename), os.path.join(uploads_dir, input_file.filename)])
+        result_str = result.decode("utf-8")
+        # Open the JSON file and read its contents
+        with open(os.path.join(results_dir, result_str.rstrip()), 'r') as f:
+            json_data = json.load(f)
+        print(json_data)
+        # Create a Flask response with the JSON data
+        response = jsonify(json_data)
+        response.headers['Content-Type'] = 'application/json'
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.status_code = 200
+
+        return response
+    except Exception as e:
+        print(e)
 
     myResponse = make_response('Response')
     myResponse.status_code = 200
