@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+
+  zookeeper:
+    image: arm64v8/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+    restart: always
+    networks:
+      net0:
+        ipv4_address: 172.25.0.40
+
+  worker:
+    build : ./Worker
+    # container_name: worker
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./Worker:/worker
+    deploy:
+      replicas: 3
+    networks:
+      - net0
+
+networks:
+  net0:
+    driver : bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
