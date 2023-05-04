@@ -45,11 +45,11 @@ services:
   #-----------------------------------------------
   # UI Service
   #-----------------------------------------------
-  ui_service:
+  ui:
       ports:
         - '5050:3000'
       build: ./UI
-      image: ui:latest
+      image: ui_service:latest
       container_name: ui
       command: /bin/bash
       stdin_open: true
@@ -68,7 +68,7 @@ services:
   # Zookeeper Service
   #-----------------------------------------------
   zookeeper:
-    image: arm64v8/zookeeper:latest
+    image: zookeeper:latest
     container_name: zookeeper
     ports:
       - "2181:2181"

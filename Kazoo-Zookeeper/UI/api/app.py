@@ -1,11 +1,11 @@
-from flask import Flask, jsonify, render_template, request, redirect, make_response
+from flask import Flask, jsonify, render_template, request, redirect, make_response, session
 import subprocess, json, os, datetime, requests, jwt
 from kazoo.client import KazooClient,KazooState
 from kazoo.exceptions import NoNodeError, NodeExistsError, SessionExpiredError
 
-
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.secret_key = "session_secret"
 
 # Create a directory in a known location to save files to.
 uploads_dir = os.path.join(app.root_path, '../shared')
@@ -51,18 +51,16 @@ def login():
             response_body = response.json()
             token = response_body['Token']
             jwt_data = jwt.decode(token, "DISTRIBUTEDSYSTEMSPROJECT1", algorithms="HS256")
-            print(jwt_data)
+            session['username']=jwt_data['username']
             return redirect('/workers')
-        elif response.status_code == 404:
-            return redirect('/login')
         else:
-            myResponse = make_response('Response')
-            myResponse.status_code = 200
-
-            return myResponse
+            return redirect('/login')
 
 
-        
+@app.route("/logout")
+def logout():
+    session.pop('username', None)
+    return redirect("/login") 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -88,32 +86,32 @@ def signup():
         return myResponse
 
 
-@app.route('/worker_status', methods=['GET'])
+@app.route('/get_workers', methods=['GET'])
 def get_worker_status():
-    # subprocess.run(['./checkLiveWorkers.sh'])
+    subprocess.run(['./ClusterIPAdresses.sh'])
 
-    # # Read the JSON output file
-    # with open('WorkerStatus.json', 'r') as f:
-    #     worker_status = json.load(f)
+    # Read the JSON output file
+    with open('WorkerIPs.json', 'r') as f:
+        workers = json.load(f)
 
-    # # Create a Flask response with the JSON data
-    # response = jsonify(worker_status)
-    # response.headers['Content-Type'] = 'application/json'
-    # response.headers.add('Access-Control-Allow-Origin', '*')
-    # response.status_code = 200
+    # Create a Flask response with the JSON data
+    response = jsonify(workers)
+    response.headers['Content-Type'] = 'application/json'
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.status_code = 200
 
-    # return response
-    myResponse = make_response('Response')
-    myResponse.status_code = 200
-
-    return myResponse
+    return response
 
 @app.route('/workers', methods=['GET'])
 def workers():
+    if not 'username' in session:
+        return redirect("/login")
     return render_template('workers.html')
 
 @app.route('/jobs', methods=['GET'])
 def job():
+    if not 'username' in session:
+        return redirect("/login")
     return render_template('jobs.html')
 
 @app.route('/upload_files', methods=['POST'])

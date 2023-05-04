@@ -20,18 +20,19 @@
                 <a href="/jobs" class="text-light fs-4 me-5" style="text-decoration: none;">Jobs <i class="bi bi-clipboard-check-fill"></i> </a>
             </li>
             <li class="nav-item">
-                <a href="/" class="text-light fs-4 me-5" style="text-decoration: none;">User <i class="bi bi-person-circle"></i> </a>
+                <a href="#" class="text-warning fw-bold fs-4 me-5" style="text-decoration: none;">{{ session['username'] }} <i class="bi bi-person-circle"></i> </a>
+            </li>
+            <li class="nav-item">
+                <a href="/logout" class="text-light fs-4 me-5" style="text-decoration: none;">Logout <i class="bi bi-door-open-fill"></i> </a>
             </li>
         </ul>
-    </nav>
+      </nav>
     <div class="w-100 d-flex justify-content-center align-items-center">
-        <table class="table table-dark table-striped mt-5 w-75 rounded rounded-3 overflow-hidden">
+        <table class="table table-dark table-striped mt-5 w-75 rounded rounded-3 overflow-hidden" style="height: 500px;">
             <thead>
                 <tr>
-                <th scope="col" style="text-align:center; width:10%">#</th>
-                <th scope="col" style="text-align:center; width:30%">Container Name</th>
-                <th scope="col" style="text-align:center; width:30%">IPv4</th>
-                <th scope="col" style="text-align:center; width:30%">Status</th>
+                    <th scope="col" class="w-50"><span class="text-center fs-2 d-flex justify-content-center text-primary fw-bold">#</span></th>
+                    <th scope="col" class="w-50"><span class="text-center fs-2 d-flex justify-content-center text-primary fw-bold">IPv4</span></th>
                 </tr>
             </thead>
             <tbody id="table-body">
@@ -40,18 +41,16 @@
     </div>
     <script>
         function getStatus() {
-            fetch('http://127.0.0.1:5050/worker_status')
+            fetch('http://127.0.0.1:5050/get_workers')
             .then(response => response.json())
             .then(response => {
-                let workers = response.workers
+                let ips = response.ips
                 document.getElementById('table-body').innerHTML=''
-                for(let i = 0; i < workers.length; i++){
+                for(let i = 0; i < ips.length; i++){
                     document.getElementById('table-body').innerHTML+=
                     `<tr>
-                        <td class="fw-bold fs-5 text-warning text-center">${i}</th>
-                        <td class="fw-bold fs-5 text-center">${workers[i].name}</td>
-                        <td class="fw-bold fs-5 text-center text-primary">${workers[i].ip}</td>
-                        <td class="fw-bold fs-5 text-center">${workers[i].status == 1 ? 'Online ✅' : 'Offline ❌'}</td>
+                        <td><span class="fs-2 d-flex align-items-center justify-content-center fw-bold text-warning">${i}</span></th>
+                        <td><span class="fs-2 d-flex align-items-center justify-content-center fw-bold text-success">${ips[i]}</span></td>
                     </tr>`
                 }
                 
