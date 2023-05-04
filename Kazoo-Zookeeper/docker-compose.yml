@@ -2,6 +2,71 @@ version: '3.9'
 
 services:
 
+  #-----------------------------------------------
+  # Authentication Service
+  #-----------------------------------------------
+  auth:
+    build: ./Authentication
+    image: authentication_service:latest
+    command: "npx nodemon index.js"
+    container_name: authentication
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Authentication:/app
+      - /app/node_modules
+    depends_on:
+      - mysql
+    networks:
+      net0:
+        ipv4_address: 172.25.0.41
+
+  #-----------------------------------------------
+  # MySQL Database
+  #-----------------------------------------------
+  mysql:
+    image: mysql
+    container_name: authentication_db
+    hostname: authentication_db
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=xyz123"
+      - "MYSQL_DATABASE=authentication_db"
+    networks:
+      net0:
+        ipv4_address: 172.25.0.42
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  #-----------------------------------------------
+  # UI Service
+  #-----------------------------------------------
+  ui_service:
+      ports:
+        - '5050:3000'
+      build: ./UI
+      image: ui:latest
+      container_name: ui
+      command: /bin/bash
+      stdin_open: true
+      tty: true
+      volumes:
+        - ./UI:/ui
+        - 'shared:/ui/shared'
+        - './shared:/ui/shared'
+        - 'results:/ui/results'
+        - './results:/ui/results'
+      networks:
+        net0:
+          ipv4_address: 172.25.0.43
+
+  #-----------------------------------------------
+  # Zookeeper Service
+  #-----------------------------------------------
   zookeeper:
     image: arm64v8/zookeeper:latest
     container_name: zookeeper
@@ -14,18 +79,32 @@ services:
       net0:
         ipv4_address: 172.25.0.40
 
+  #-----------------------------------------------
+  # Worker Service
+  #-----------------------------------------------
   worker:
     build : ./Worker
-    # container_name: worker
-    command: /bin/bash
-    stdin_open: true
-    tty: true
     volumes:
       - ./Worker:/worker
+      - 'shared:/worker/shared'
+      - ./shared:/worker/shared
+      - 'results:/worker/results'
+      - ./results:/worker/results
     deploy:
       replicas: 3
     networks:
       - net0
+
+volumes:
+  volumes:
+  mysql-data:
+    name: mysql_volume
+  shared:
+    driver: local
+    name: shared
+  results:
+    driver: local
+    name: results
 
 networks:
   net0:

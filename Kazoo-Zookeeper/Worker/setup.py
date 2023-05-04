@@ -8,16 +8,12 @@ zk = KazooClient(hosts='172.25.0.40:2181')
 zk.start()
 
 def add_task(_data):
-    # Ensure path
     zk.ensure_path(task_path)
     now = datetime.datetime.now()
-    timestamp = now.strftime("%S")
+    timestamp = now.strftime("%H_%M_%S_%d_%m_%Y")
     task_name = f'task_{timestamp}'
-    # Set indexed task path
     task_path_with_name = f'{task_path}/{task_name}'
-    # Get JSON task data bytes
     data_bytes = json.dumps(_data).encode('utf-8')
-    # Create task znode
     try:
         zk.create(task_path_with_name, data_bytes)
     except NodeExistsError:
@@ -37,17 +33,23 @@ def delete_task(_task_znode_path):
 
 def clear_tasks():
     zk.delete(f'{task_path}', recursive=True)
+    zk.delete(f'{ongoing_path}', recursive=True)
+    get_tasks()
+
 
 def main():
-    add_task({"check":"yes"})
+    # get_tasks()
+    # clear_tasks()
+    job = {"job_file_name":"job.py", "input_file_name":"input.txt"}
+    add_task(job)
     time.sleep(2)
-    add_task({"check":"yes"})
+    add_task(job)    
     time.sleep(2)
-    add_task({"check":"yes"})   
+    add_task(job)  
     time.sleep(2)
-    add_task({"check":"yes"})
+    add_task(job)
     time.sleep(2)
-    add_task({"check":"yes"})
+    add_task(job)
 
 
 if __name__ == "__main__":
