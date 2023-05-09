@@ -3,6 +3,7 @@ from kazoo.exceptions import NoNodeError, NodeExistsError, SessionExpiredError
 import json,datetime,time
 
 task_path='/tasks'
+job_path='/jobs'
 ongoing_path='/ongoing'
 zk = KazooClient(hosts='172.25.0.40:2181')
 zk.start()
@@ -36,10 +37,23 @@ def clear_tasks():
     zk.delete(f'{ongoing_path}', recursive=True)
     get_tasks()
 
+def get_everything():
+    get_tasks()
+    zk.ensure_path(job_path)
+    job_nodes = zk.get_children(job_path)
+    print(job_nodes)
+    for i in range(len(job_nodes)):
+        ch = zk.get_children(f'{job_path}/{job_nodes[i]}')
+        print(ch)
 
+def delete_jobs():
+    zk.delete(f'{job_path}', recursive=True)
+    
 def main():
+    # clear_tasks()
+    # delete_jobs()
     while True:
-        get_tasks()
+        get_everything()
         time.sleep(2)
 
 

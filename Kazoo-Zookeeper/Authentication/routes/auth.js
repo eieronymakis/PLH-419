@@ -26,7 +26,7 @@ router
                     let token = jwt.sign(token_info,process.env.JWT_SECRET);
                     res.send({Token:token}).status(200).end()
                 }else{
-                    res.send({Message:'Credentials incorrect'}).status(401).end()
+                    res.status(401).send({"Message":"Incorrect Credentials"}).end()
                 }
             }
         }

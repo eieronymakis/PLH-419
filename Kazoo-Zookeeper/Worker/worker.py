@@ -12,6 +12,7 @@ zk.start()
 #-----------------------------------
 task_path = '/tasks'
 ongoing_path = '/ongoing'
+job_path = '/jobs'
 
 #-----------------------------------
 # Read task data from znode
@@ -31,8 +32,10 @@ def process_task(task):
     input_file_name = task_data['input_file_name']
     job_file_name = task_data['job_file_name']
 
+    module_name = os.path.splitext(os.path.basename(job_file_name))[0]
+
     # Import Job Module
-    job_module = importlib.import_module('shared.job')
+    job_module = importlib.import_module("shared."+module_name)
 
     # Read Input File
     with open('shared/'+input_file_name, 'r') as f:
@@ -71,6 +74,17 @@ def release_ongoing_node(task):
 #-----------------------------------
 def release_task_node(task):
     try:
+        task_data = get_node_data(task)
+        job_name = task_data['job_znode']
+
+        zk.delete(f'{job_path}/{job_name}/{task}')
+
+        job_tasks = zk.get_children(f'{job_path}/{job_name}')
+        print(job_tasks)
+
+        if(len(job_tasks) == 0):
+            print('Job done senting callback')
+
         # Remove the task znode, task is complete
         zk.delete(f'{task_path}/{task}')
         return True
@@ -85,7 +99,7 @@ def acquire_task(task):
         # Check if the ongoing task znode already exists
         try:
             if zk.exists(f'{ongoing_path}/{task}'):
-                # print(f"Task {task} is already ongoing")
+                print(f"Task {task} is already ongoing")
                 return False
             # Create an ephemeral znode to acquire the task
             zk.create(f'{ongoing_path}/{task}', ephemeral=True)
@@ -94,9 +108,9 @@ def acquire_task(task):
             return False
 
 #-----------------------------------
-# Callback function when new tasks are added
+# Watcher function
 #-----------------------------------
-def my_callback(event):
+def watcher():
     # Get the new children task znodes
     tasks = zk.get_children('/tasks')
     for task in tasks:
@@ -136,8 +150,7 @@ while True:
     zk.ensure_path(task_path)
     zk.ensure_path(ongoing_path)
 
-    # Watch for new tasks or removed tasks
-    tasks = zk.get_children(task_path, watch=my_callback)
+    watcher()
 
     # Search every 3 seconds
     time.sleep(3)

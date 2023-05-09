@@ -18,7 +18,7 @@ def split_file(file_path, num_chunks):
         chunk = lines[start_idx:end_idx]
 
 
-        with open(os.path.dirname(__file__)+'/../jobs/'+prefix+'_chunk_'+str(i+1)+'.txt', 'w')as f:
+        with open(os.path.dirname(__file__)+'/../shared/'+prefix+'_chunk_'+str(i+1)+'.txt', 'w')as f:
             f.writelines(chunk)
             files.append(prefix+'_chunk_'+str(i+1)+'.txt')
     
