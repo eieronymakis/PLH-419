@@ -2,10 +2,21 @@ from flask import Flask, jsonify, render_template, request, redirect, make_respo
 import subprocess, json, os, datetime, requests, jwt, pytz
 from kazoo.client import KazooClient,KazooState
 from kazoo.exceptions import NoNodeError, NodeExistsError, SessionExpiredError
+import mysql.connector
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.secret_key = "session_secret"
+
+db = mysql.connector.connect(
+    host="authentication_db",
+    user="root",
+    password="xyz123",
+    database="authentication_db"   
+)
+db.autocommit = True
+cursor = db.cursor()
+
 
 # Create a directory in a known location to save files to.
 uploads_dir = os.path.join(app.root_path, '../shared')
@@ -152,18 +163,22 @@ def upload_file():
     zk.ensure_path(job_path)
     zk.create(job_name_with_path)
 
+    timestamp_mysql = now.strftime('%Y-%m-%d %H:%M:%S')
+    query=f"INSERT INTO jobs(name,date) values ('{job_name}','{timestamp_mysql}')"
+    cursor.execute(query)
+
     chunks = split_file(os.path.join(uploads_dir, input_file.filename), worker_count)
 
     for i in range(len(chunks)):
         task = {"job_file_name": job_file.filename, "input_file_name": chunks[i], "job_znode":job_name}
-        add_task(task, job_name_with_path, i+1)
+        add_task(task, job_name_with_path, i+1, job_name)
 
     myResponse = make_response('Response')
     myResponse.status_code = 200
 
     return myResponse
 
-def add_task(_data, _job_path, _index):
+def add_task(_data, _job_path, _index, _job_name):
     zk.ensure_path(task_path)
 
     tz = pytz.timezone('Europe/Athens')
@@ -173,14 +188,21 @@ def add_task(_data, _job_path, _index):
     task_name = f'task_{timestamp}_{_index}'
     task_path_with_name = f'{task_path}/{task_name}'
     data_bytes = json.dumps(_data).encode('utf-8')
+
     try:
         zk.create(task_path_with_name, data_bytes)
         zk.create(f'{_job_path}/{task_name}')
+
+        timestamp_mysql = now.strftime('%Y-%m-%d %H:%M:%S')
+        query=f"INSERT INTO tasks(name,jobName) values('{task_name}','{_job_name}')"
+        cursor.execute(query)
+
     except NodeExistsError:
         pass
     return task_name
 
 def split_file(file_path, num_chunks):
+    
     tz = pytz.timezone('Europe/Athens')
     now = datetime.datetime.now(tz)
     timestamp = now.strftime("%H_%M_%S_%d_%m_%Y")
@@ -212,8 +234,23 @@ def split_file(file_path, num_chunks):
 #------------------------------------------------------
 @app.route('/callback', methods=['POST'])
 def callback():
-    data = request.get_json()
-    job_id  = data['job_id']
+
+    now = datetime.datetime.now()
+    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+
+
+    
+    print(string)
+    
+    
+
+    cursor.execute("SELECT * FROM jobs")
+    results = cursor.fetchall()
+    for row in results:
+        print(row)
+
+    # data = request.get_json()
+    # job_id  = data['job_id']
     myResponse = make_response('Response')
     myResponse.status_code = 200
     return myResponse

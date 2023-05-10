@@ -1,6 +1,17 @@
 import time, json, os, importlib
 from kazoo.client import KazooClient
 
+import mysql.connector
+
+db = mysql.connector.connect(
+    host="authentication_db",
+    user="root",
+    password="xyz123",
+    database="authentication_db"   
+)
+db.autocommit = True
+cursor = db.cursor()
+
 #-----------------------------------
 # Connect to Zookeeper
 #-----------------------------------
@@ -48,11 +59,17 @@ def process_task(task):
     json_object = json.dumps(sorted_results)
 
     # Save Results 
-    output_path="results/"+task+"_results.json"
+
+    result_filename = f"{task}_results.json"
+    output_path=f"results/{result_filename}"
+
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w") as outfile:
         outfile.write(json_object)
 
+
+    query = f"UPDATE tasks SET result_filename = '{result_filename}', status = 1 WHERE name = '{task}'"
+    cursor.execute(query)
 
     print ('Task ',task,' Done')
     return True

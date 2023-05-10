@@ -1,1 +1,0 @@
-{"workers":[{"name": "worker1", "ip": "172.25.0.10", "status": "1"},{"name": "worker2", "ip": "172.25.0.11", "status": "1"},{"name": "worker3", "ip": "172.25.0.12", "status": "1"},{"name": "worker4", "ip": "172.25.0.13", "status": "1"}]}
