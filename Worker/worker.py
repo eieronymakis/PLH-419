@@ -1,4 +1,4 @@
-import time, json, os, importlib
+import time, json, os, importlib, requests
 from kazoo.client import KazooClient
 
 import mysql.connector
@@ -97,10 +97,9 @@ def release_task_node(task):
         zk.delete(f'{job_path}/{job_name}/{task}')
 
         job_tasks = zk.get_children(f'{job_path}/{job_name}')
-        print(job_tasks)
 
         if(len(job_tasks) == 0):
-            print('Job done senting callback')
+            requests.post('http://172.25.0.43:3000/callback', json={"job_name" : job_name})
 
         # Remove the task znode, task is complete
         zk.delete(f'{task_path}/{task}')

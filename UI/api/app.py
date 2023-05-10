@@ -234,26 +234,62 @@ def split_file(file_path, num_chunks):
 #------------------------------------------------------
 @app.route('/callback', methods=['POST'])
 def callback():
+    body = request.get_json()
+    job_name  = body['job_name']
+    query = f"UPDATE jobs SET status = 1 WHERE name = '{job_name}' "
+    cursor.execute(query)
 
-    now = datetime.datetime.now()
-    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
-
-
-    
-    print(string)
-    
-    
-
-    cursor.execute("SELECT * FROM jobs")
-    results = cursor.fetchall()
-    for row in results:
-        print(row)
-
-    # data = request.get_json()
-    # job_id  = data['job_id']
     myResponse = make_response('Response')
     myResponse.status_code = 200
     return myResponse
+
+
+@app.route('/results', methods=['GET'])
+def results():
+    if not 'username' in session:
+        return redirect("/login")
+    return render_template('results.html')
+
+@app.route('/results/<job_name>', methods=['GET'])
+def job_results(job_name):
+    if not 'username' in session:
+        return redirect("/login")
+
+    query = f"SELECT * FROM tasks WHERE jobName = '{job_name}'"
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+
+    rows_json = []
+    for row in rows:
+        row_dict = dict(zip(cursor.column_names, row))
+        rows_json.append(row_dict)
+
+
+    return render_template('result_files.html', data=rows_json)
+#------------------------------------------------------
+#                   /JOB_STATUS
+#------------------------------------------------------
+@app.route('/job_status', methods=['GET'])
+def job_status():
+    query = f"SELECT * FROM jobs"
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+
+    rows_json = []
+    for row in rows:
+        row_dict = dict(zip(cursor.column_names, row))
+        rows_json.append(row_dict)
+
+    response = jsonify(rows_json)
+    response.headers['Content-Type'] = 'application/json'
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.status_code = 200
+
+    return response
+
+
 
 
 if __name__ == '__main__':  

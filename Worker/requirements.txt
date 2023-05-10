@@ -1,0 +1,3 @@
+kazoo
+mysql-connector-python
+requests
