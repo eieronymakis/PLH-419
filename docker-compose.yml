@@ -52,9 +52,10 @@ services:
       build: ./UI
       image: ui_service:latest
       container_name: ui
-      command: /bin/bash
+      command: /bin/bash -c "cd api && make"
       stdin_open: true
       tty: true
+      restart: always
       depends_on:
         - mysql
       volumes:
@@ -66,6 +67,7 @@ services:
       networks:
         net0:
           ipv4_address: 172.25.0.43
+      
 
   #-----------------------------------------------
   # Zookeeper Service
