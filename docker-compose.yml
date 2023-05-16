@@ -1,7 +1,20 @@
 version: '3.9'
 
 services:
-
+  #-----------------------------------------------
+  # Zookeeper Service
+  #-----------------------------------------------
+  zookeeper:
+    image: zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+    restart: always
+    networks:
+      net0:
+        ipv4_address: 172.25.0.40
   #-----------------------------------------------
   # Authentication Service
   #-----------------------------------------------
@@ -21,7 +34,6 @@ services:
     networks:
       net0:
         ipv4_address: 172.25.0.41
-
   #-----------------------------------------------
   # MySQL Database
   #-----------------------------------------------
@@ -42,16 +54,44 @@ services:
         ipv4_address: 172.25.0.42
     volumes:
       - mysql-data:/var/lib/mysql
-
+  #-----------------------------------------------
+  # NGINX Server (Load Balancer & Reverse Proxy for UI Service)
+  #-----------------------------------------------
+  nginx:
+    image: nginx:latest
+    container_name: nginx_ui
+    ports:
+      - "5050:3000"
+    volumes:
+      - ./NGINX/ui/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - ui
+    networks:
+      net0:
+        ipv4_address: 172.25.0.43
+  #-----------------------------------------------
+  # Internal NGINX Server (Load Balancer & Reverse Proxy for Monitoring Service)
+  #-----------------------------------------------
+  nginx2:
+    image: nginx:latest
+    container_name: nginx_monitoring
+    ports:
+      - "3000"
+    volumes:
+      - ./NGINX/monitoring/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - monitoring
+    networks:
+      net0:
+        ipv4_address: 172.25.0.44
   #-----------------------------------------------
   # UI Service
   #-----------------------------------------------
   ui:
-      ports:
-        - '5050:3000'
       build: ./UI
-      image: ui_service:latest
-      container_name: ui
+      image: ui:latest
+      deploy:
+        replicas: 3
       command: /bin/bash -c "cd api && make"
       stdin_open: true
       tty: true
@@ -65,30 +105,36 @@ services:
         - 'results:/ui/results'
         - './results:/ui/results'
       networks:
-        net0:
-          ipv4_address: 172.25.0.43
-      
-
+        - net0
   #-----------------------------------------------
-  # Zookeeper Service
+  # Monitoring Service
   #-----------------------------------------------
-  zookeeper:
-    image: zookeeper:latest
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-      - "2888:2888"
-      - "3888:3888"
-    restart: always
-    networks:
-      net0:
-        ipv4_address: 172.25.0.40
-
+  monitoring:
+      build: ./Monitoring
+      image: monitoring:latest
+      deploy:
+        replicas: 3
+      command: /bin/bash -c "cd api && make" 
+      stdin_open: true
+      tty: true
+      restart: always
+      depends_on:
+        - mysql
+        - zookeeper
+      volumes:
+        - ./Monitoring:/monitoring
+        - 'shared:/monitoring/shared'
+        - './shared:/monitoring/shared'
+        - 'results:/monitoring/results'
+        - './results:/monitoring/results'
+      networks:
+        - net0
   #-----------------------------------------------
   # Worker Service
   #-----------------------------------------------
   worker:
     build : ./Worker
+    image: worker:latest
     volumes:
       - ./Worker:/worker
       - 'shared:/worker/shared'
@@ -98,6 +144,7 @@ services:
     restart: always
     depends_on:
       - mysql
+      - zookeeper
     deploy:
       replicas: 3
     networks:

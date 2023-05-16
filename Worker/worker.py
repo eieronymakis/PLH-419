@@ -99,7 +99,7 @@ def release_task_node(task):
         job_tasks = zk.get_children(f'{job_path}/{job_name}')
 
         if(len(job_tasks) == 0):
-            requests.post('http://172.25.0.43:3000/callback', json={"job_name" : job_name})
+            requests.post('http://172.25.0.44:3000/callback', json={"job_name" : job_name})
 
         # Remove the task znode, task is complete
         zk.delete(f'{task_path}/{task}')

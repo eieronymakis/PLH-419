@@ -50,8 +50,8 @@ def delete_jobs():
     zk.delete(f'{job_path}', recursive=True)
     
 def main():
-    clear_tasks()
-    delete_jobs()
+    # clear_tasks()
+    # delete_jobs()
     while True:
         get_everything()
         time.sleep(2)

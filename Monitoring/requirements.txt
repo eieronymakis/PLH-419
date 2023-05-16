@@ -1,0 +1,6 @@
+Flask
+kazoo
+requests
+pyjwt
+pytz
+mysql-connector-python
