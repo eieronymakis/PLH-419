@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request, redirect, make_response, session
+from flask import Flask, jsonify, render_template, request, redirect, make_response, session, send_file
 import subprocess, json, os, datetime, requests, jwt, pytz
 import mysql.connector
 
@@ -167,8 +167,40 @@ def job_results(job_name):
         row_dict = dict(zip(cursor.column_names, row))
         rows_json.append(row_dict)
 
+    
+    result_dict = {}
+    for item in rows_json:
+        with open(f"{results_dir}/{item.get('result_filename')}") as f:
+            data = json.loads(f.read())
 
-    return render_template('result_files.html', data=rows_json)
+            print(data)
+
+            for key,value in data.items():
+                if key in result_dict:
+                    result_dict[key] += value
+                else:
+                    result_dict[key] = value
+
+    file_name = f"{job_name}_result.json"
+    output_path=f"{results_dir}/{file_name}"
+
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w") as outfile:
+        outfile.write(json.dumps(result_dict))
+
+
+    return render_template('result_files.html', data=rows_json, filename=file_name)
+
+#------------------------------------------------------
+#                   /DOWNLOAD
+#------------------------------------------------------
+@app.route('/download/<filename>', methods=['GET'])
+def download(filename):
+    output_path=f"{results_dir}/{filename}"
+    return send_file(output_path, as_attachment=True)
+
+
+
 #------------------------------------------------------
 #                   /JOB_STATUS
 #------------------------------------------------------

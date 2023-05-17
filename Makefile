@@ -8,3 +8,5 @@ db:
 	sudo docker exec -i ${id} mysql -uroot -pxyz123 authentication_db < ./backup.sql
 restart:
 	sudo docker restart ${id}
+nginx:
+	sudo docker exec -it ${id} nginx -s reload
