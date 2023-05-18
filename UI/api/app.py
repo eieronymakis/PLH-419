@@ -157,12 +157,13 @@ def job_results(job_name):
     if not 'username' in session:
         return redirect("/login")
 
-    query = f"SELECT * FROM tasks WHERE jobName = '{job_name}'"
+    query = f"SELECT * FROM tasks WHERE jobName = '{job_name}' AND mode='reduce' "
     cursor.execute(query)
 
     rows = cursor.fetchall()
 
     rows_json = []
+
     for row in rows:
         row_dict = dict(zip(cursor.column_names, row))
         rows_json.append(row_dict)
@@ -172,13 +173,7 @@ def job_results(job_name):
     for item in rows_json:
         with open(f"{results_dir}/{item.get('result_filename')}") as f:
             data = json.loads(f.read())
-
-            print(data)
-
             for key,value in data.items():
-                if key in result_dict:
-                    result_dict[key] += value
-                else:
                     result_dict[key] = value
 
     file_name = f"{job_name}_result.json"

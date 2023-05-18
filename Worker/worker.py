@@ -37,43 +37,67 @@ def get_node_data(node_path):
 #-----------------------------------
 def process_task(task):
     task_data = get_node_data(task)
-    #-----------------------------------
-    #   MapReduce Code Functionality
-    #-----------------------------------
-    input_file_name = task_data['input_file_name']
-    job_file_name = task_data['job_file_name']
 
-    module_name = os.path.splitext(os.path.basename(job_file_name))[0]
+    if task_data['mode'] == "map" :
 
-    # Import Job Module
-    job_module = importlib.import_module("shared."+module_name)
+        #-----------------------------------
+        #   MapReduce Code Functionality
+        #-----------------------------------
+        input_file_name = task_data['input_file_name']
+        job_file_name = task_data['job_file_name']
 
-    # Read Input File
-    with open('shared/'+input_file_name, 'r') as f:
-        text = f.read()
+        module_name = os.path.splitext(os.path.basename(job_file_name))[0]
 
-    mapper_data = job_module.mapper(text)
-    results = job_module.reducer(mapper_data)
+        # Import Job Module
+        job_module = importlib.import_module("shared."+module_name)
 
-    sorted_results = dict(sorted(results.items()))
-    json_object = json.dumps(sorted_results)
+        # Read Input File
+        with open('shared/'+input_file_name, 'r') as f:
+            text = f.read()
 
-    # Save Results 
+        mapper_data = job_module.mapper(text)
 
-    result_filename = f"{task}_results.json"
-    output_path=f"results/{result_filename}"
+        data_dict = {k: v for k, v in mapper_data}
 
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, "w") as outfile:
-        outfile.write(json_object)
+        # Convert to JSON
+        json_data = json.dumps(data_dict)
 
+        mapper_output_filename = f"{task}_mapper_results.json"
+        output_path=f"results/{mapper_output_filename}"
 
-    query = f"UPDATE tasks SET result_filename = '{result_filename}', status = 1 WHERE name = '{task}'"
-    cursor.execute(query)
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        with open(output_path, "w") as outfile:
+            outfile.write(json_data)
 
-    print ('Task ',task,' Done')
+        query = f"UPDATE tasks SET result_filename = '{mapper_output_filename}', status = 1 WHERE name = '{task}'"
+        cursor.execute(query)
+
+    elif task_data['mode'] == "reduce":
+        input_file_name = task_data['input_file_name']
+        job_file_name = task_data['job_file_name']
+
+        module_name = os.path.splitext(os.path.basename(job_file_name))[0]
+        # Import Job Module
+        job_module = importlib.import_module("shared."+module_name)
+        
+        with open('shared/'+input_file_name, 'r') as f:
+            data = f.read()
+
+        merged_dict = json.loads(data)
+
+        reducer_data = job_module.reducer(merged_dict)
+
+        reducer_output_filename = f"{task}_reducer_results.json"
+        output_path=f"results/{reducer_output_filename}"
+
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        with open(output_path, "w") as outfile:
+            json.dump(reducer_data, outfile)
+        
+        query = f"UPDATE tasks SET result_filename = '{reducer_output_filename}', status = 1 WHERE name = '{task}'"
+        cursor.execute(query)
     return True
-
+    
 #-----------------------------------
 # Remove task from ongoing Queue (Task Completed/Failed)
 #-----------------------------------
@@ -83,30 +107,46 @@ def release_ongoing_node(task):
         zk.delete(f'{ongoing_path}/{task}')
         return True
     except Exception as e:
-        print(f"Failed to release task {task}: {e}")
+        print(f"Failed to release ongoing task {task}: {e}")
         return False
     
 #-----------------------------------
 # Remove task from Queue (Task Completed)
 #-----------------------------------
 def release_task_node(task):
-    try:
-        task_data = get_node_data(task)
-        job_name = task_data['job_znode']
 
-        zk.delete(f'{job_path}/{job_name}/{task}')
+    task_data = get_node_data(task)
 
-        job_tasks = zk.get_children(f'{job_path}/{job_name}')
+    job_name = task_data['job_znode']
+    task_mode = task_data['mode']
+    job_filename = task_data['job_file_name']
 
-        if(len(job_tasks) == 0):
-            requests.post('http://172.25.0.44:3000/callback', json={"job_name" : job_name})
+    zk.delete(f'{job_path}/{job_name}/{task}')
+    job_tasks = zk.get_children(f'{job_path}/{job_name}')
+    
+    if(task_mode == "map"):
+        flag = False
+        for job_task in job_tasks:
+            job_task_data = get_node_data(job_task)
+            if(job_task_data['mode'] == "map" ):
+                flag = True
+                break
+        if flag == False:
+            requests.post('http://172.25.0.44:3000/map_done', json={"job_name":job_name, "job_filename": job_filename})
+    
+    elif(task_mode == "reduce"):
+        flag = False
+        for job_task in job_tasks:
+            job_task_data = get_node_data(job_task)
+            if(job_task_data['mode'] == "reduce" | job_task_data['mode'] == "map" ):
+                flag = True
+                break
+        if flag == False:
+            requests.post('http://172.25.0.44:3000/callback', json={"job_name":job_name})
 
-        # Remove the task znode, task is complete
-        zk.delete(f'{task_path}/{task}')
-        return True
-    except Exception as e:
-        print(f"Failed to release task {task}: {e}")
-        return False
+    zk.delete(f'{task_path}/{task}')
+
+    return True
     
 #-----------------------------------
 # Function for adding tasks as ongoing 
@@ -115,7 +155,7 @@ def acquire_task(task):
         # Check if the ongoing task znode already exists
         try:
             if zk.exists(f'{ongoing_path}/{task}'):
-                print(f"Task {task} is already ongoing")
+                # print(f"Task {task} is already ongoing")
                 return False
             # Create an ephemeral znode to acquire the task
             zk.create(f'{ongoing_path}/{task}', ephemeral=True)
