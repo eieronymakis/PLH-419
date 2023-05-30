@@ -14,10 +14,9 @@
 *1. Run `sudo docker compose up` in the project folder* <br>
 *2. Find the database container id and run `make db id={database_cont_id}`* <br>
 *3. Run `sudo docker restart`* <br>
-*4. Run `bash network.bash`, get the IP's of Monitoring and UI Service Replicas and update the NGINX configuration files* <br>
-*5. Run `nginx -r reload` inside each NGINX container* <br>
+*4. Run `make nginx`* <br>
 *6. Done*
 
 
 # *Service Diagram Docker*
-![alt text](https://github.com/git-egi/PLH-419/blob/main/service_diagram_docker.drawio.png?raw=true)
+![alt text](https://github.com/git-egi/PLH-419/blob/main/Diagrams/service_diagram_docker.drawio.png?raw=true)
