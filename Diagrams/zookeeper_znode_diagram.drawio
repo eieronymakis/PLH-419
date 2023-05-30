@@ -1,0 +1,148 @@
+<mxfile modified="2023-05-30T10:06:53.605Z" host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" etag="7GH51B8aZcZHCmGM-s9z" version="21.2.7" type="device">
+  <diagram id="d1ab7348-05c3-a1e3-ca4d-12c340fd6b49" name="Page-1">
+    <mxGraphModel dx="1434" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#D4CFE6" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="DiIAxfdu-_vuo50x862I-40" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.patternFillRect;fillStyle=diag;step=5;fillStrokeWidth=0.2;fillStrokeColor=#dddddd;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry width="310" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-39" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.rect;fillColor2=none;strokeWidth=1;size=20;indent=5;fillColor=#bac8d3;strokeColor=#23445d;" parent="1" vertex="1">
+          <mxGeometry x="240" y="160" width="520" height="101.25" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-38" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.rect;fillColor2=none;strokeWidth=1;size=20;indent=5;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" parent="1" vertex="1">
+          <mxGeometry x="240" y="500" width="520" height="104.37" as="geometry" />
+        </mxCell>
+        <mxCell id="FZ6S4eCfbxHt4uczrpkN-168" value="&lt;b&gt;Task ZNode i&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" parent="1" vertex="1">
+          <mxGeometry x="260" y="516.25" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FZ6S4eCfbxHt4uczrpkN-169" value="&lt;b&gt;Task ZNode i+1&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" parent="1" vertex="1">
+          <mxGeometry x="390" y="516.25" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FZ6S4eCfbxHt4uczrpkN-172" value="&lt;font style=&quot;font-size: 40px;&quot;&gt;. . .&lt;/font&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="498.5" y="543.75" width="110" height="5" as="geometry" />
+        </mxCell>
+        <mxCell id="FZ6S4eCfbxHt4uczrpkN-173" value="&lt;b&gt;Task ZNode n&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" parent="1" vertex="1">
+          <mxGeometry x="630" y="516.25" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.006;entryY=0.446;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="FZ6S4eCfbxHt4uczrpkN-191" target="DiIAxfdu-_vuo50x862I-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FZ6S4eCfbxHt4uczrpkN-191" value="&lt;b&gt;Tasks ZNode&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" parent="1" vertex="1">
+          <mxGeometry x="30" y="516.26" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-7" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.rect;fillColor2=none;strokeWidth=1;size=20;indent=5;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" parent="1" vertex="1">
+          <mxGeometry x="240" y="358.76" width="520" height="101.25" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-8" value="&lt;b&gt;Ongoing ZNode i&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#e6d0de;strokeColor=#996185;gradientColor=#d5739d;" parent="1" vertex="1">
+          <mxGeometry x="260" y="373.76" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.01;entryY=0.452;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="DiIAxfdu-_vuo50x862I-14" target="DiIAxfdu-_vuo50x862I-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-14" value="&lt;b&gt;Ongoing ZNode&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" parent="1" vertex="1">
+          <mxGeometry x="30" y="373.76" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="DiIAxfdu-_vuo50x862I-17" target="FZ6S4eCfbxHt4uczrpkN-168">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="211" />
+              <mxPoint x="380" y="546" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="DiIAxfdu-_vuo50x862I-17" target="DiIAxfdu-_vuo50x862I-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="270" />
+              <mxPoint x="310" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-17" value="" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;shape=mxgraph.azure.user;" parent="1" vertex="1">
+          <mxGeometry x="272.25" y="185.62" width="47" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-21" value="" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;shape=mxgraph.azure.user;" parent="1" vertex="1">
+          <mxGeometry x="392.25" y="185.62" width="47" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-22" value="" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;shape=mxgraph.azure.user;" parent="1" vertex="1">
+          <mxGeometry x="510.75" y="185.62" width="47" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-23" value="" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;shape=mxgraph.azure.user;" parent="1" vertex="1">
+          <mxGeometry x="680.75" y="185.62" width="47" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-24" value="&lt;font style=&quot;font-size: 40px;&quot;&gt;. . .&lt;/font&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="565.25" y="195.62" width="110" height="5" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-27" value="&lt;span style=&quot;font-size: 19px;&quot;&gt;&lt;b&gt;Worker Containers&lt;br&gt;(Kazoo Connections)&lt;br&gt;&lt;/b&gt;&lt;/span&gt;" style="text;strokeColor=#10739e;align=center;fillColor=#b1ddf0;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="810" y="180.62" width="235" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-28" value="&lt;span style=&quot;font-size: 19px;&quot;&gt;&lt;b&gt;Ongoing Queue&lt;br&gt;&lt;/b&gt;&lt;/span&gt;" style="text;strokeColor=#10739e;align=center;fillColor=#b1ddf0;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="800" y="373.76" width="235" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-29" value="&lt;span style=&quot;font-size: 19px;&quot;&gt;&lt;b&gt;Task Queue&lt;br&gt;&lt;/b&gt;&lt;/span&gt;" style="text;strokeColor=#10739e;align=center;fillColor=#b1ddf0;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="800" y="522.18" width="235" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-34" value="&lt;b&gt;Persistent Node&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" parent="1" vertex="1">
+          <mxGeometry x="30" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DiIAxfdu-_vuo50x862I-35" value="&lt;b&gt;Ephemeral Node&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#e6d0de;strokeColor=#996185;gradientColor=#d5739d;" parent="1" vertex="1">
+          <mxGeometry x="160" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-1" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.rect;fillColor2=none;strokeWidth=1;size=20;indent=5;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="240" y="650" width="520" height="104.37" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=94;entryDy=54;entryPerimeter=0;" edge="1" parent="1" source="AsADd6090BQjeJvSQ2Pt-3" target="FZ6S4eCfbxHt4uczrpkN-168">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="354" y="640" />
+              <mxPoint x="354" y="640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-3" value="&lt;b&gt;Job ZNode i&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
+          <mxGeometry x="260" y="666.25" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=94;entryDy=54;entryPerimeter=0;" edge="1" parent="1" source="AsADd6090BQjeJvSQ2Pt-4" target="FZ6S4eCfbxHt4uczrpkN-169">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AsADd6090BQjeJvSQ2Pt-4" target="FZ6S4eCfbxHt4uczrpkN-173">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="440" y="640" />
+              <mxPoint x="610" y="640" />
+              <mxPoint x="610" y="546" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-4" value="&lt;b&gt;Job ZNode i+1&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
+          <mxGeometry x="390" y="666.25" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-5" value="&lt;font style=&quot;font-size: 40px;&quot;&gt;. . .&lt;/font&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="498.5" y="693.75" width="110" height="5" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-6" value="&lt;b&gt;Job ZNode n&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
+          <mxGeometry x="630" y="666.25" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.006;entryY=0.446;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AsADd6090BQjeJvSQ2Pt-7" target="AsADd6090BQjeJvSQ2Pt-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-7" value="&lt;b&gt;Jobs ZNode&lt;/b&gt;" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.diag_snip_rect;dx=6;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
+          <mxGeometry x="30" y="666.26" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-8" value="&lt;span style=&quot;font-size: 19px;&quot;&gt;&lt;b&gt;Job Queue&lt;br&gt;&lt;/b&gt;&lt;/span&gt;" style="text;strokeColor=#10739e;align=center;fillColor=#b1ddf0;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="800" y="672.18" width="235" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-19" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;i&gt;&lt;b&gt;This queue exists to keep track of ongoing tasks, so other workers don&#39;t try to aquire the same task.&amp;nbsp;&lt;/b&gt;&lt;/i&gt;&lt;i style=&quot;background-color: initial;&quot;&gt;&lt;b&gt;Also implements fail over mechanism by using Ephemeral type znodes (If a worker fails then ongoing znode gets deleted and another worker aquires the task)&lt;/b&gt;&lt;/i&gt;&lt;i&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/i&gt;&lt;/font&gt;" style="text;strokeColor=none;align=left;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="800" y="440" width="520" height="68.75" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-20" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;i&gt;&lt;b&gt;The Job Queue exists to keep track of which tasks belong to which jobs. Every job znode holds the according&lt;/b&gt;&lt;/i&gt;&lt;i style=&quot;border-color: var(--border-color);&quot;&gt;&lt;b style=&quot;border-color: var(--border-color);&quot;&gt;&amp;nbsp;children&amp;nbsp;&lt;/b&gt;&lt;/i&gt;&lt;i&gt;&lt;b&gt;task znodes (If no children after a task znode gets deleted, job is complete)&lt;br&gt;&lt;/b&gt;&lt;/i&gt;&lt;/font&gt;" style="text;strokeColor=none;align=left;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="800" y="740" width="490" height="68.75" as="geometry" />
+        </mxCell>
+        <mxCell id="AsADd6090BQjeJvSQ2Pt-21" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;i&gt;&lt;b&gt;A basic queue that holds information about tasks that need to be done. Each task is represented by a task znode&lt;br&gt;&lt;/b&gt;&lt;/i&gt;&lt;/font&gt;" style="text;strokeColor=none;align=left;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="800" y="570" width="450" height="68.75" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
