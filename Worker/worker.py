@@ -121,6 +121,7 @@ def release_task_node(task):
     task_mode = task_data['mode']
     job_filename = task_data['job_file_name']
 
+    zk.delete(f'{task_path}/{task}')
     zk.delete(f'{job_path}/{job_name}/{task}')
     job_tasks = zk.get_children(f'{job_path}/{job_name}')
     
@@ -138,13 +139,11 @@ def release_task_node(task):
         flag = False
         for job_task in job_tasks:
             job_task_data = get_node_data(job_task)
-            if(job_task_data['mode'] == "reduce" | job_task_data['mode'] == "map" ):
+            if(job_task_data['mode'] == "reduce"):
                 flag = True
                 break
         if flag == False:
             requests.post('http://172.25.0.44:3000/callback', json={"job_name":job_name})
-
-    zk.delete(f'{task_path}/{task}')
 
     return True
     

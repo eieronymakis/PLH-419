@@ -41,12 +41,6 @@ def upload_file():
     job_file_name = body['job_file_name']
     input_file_name = body['input_file_name']
 
-    # Get the active worker count
-    subprocess.run(['./ClusterIPAdresses.sh'])
-    with open('WorkerIPs.json', 'r') as f:
-        workers = json.load(f)
-    worker_count = len(workers['ips'])
-
     # Get timestamp
     tz = pytz.timezone('Europe/Athens')
     now = datetime.datetime.now(tz)
@@ -64,7 +58,7 @@ def upload_file():
     query=f"INSERT INTO jobs(name,date) values ('{job_name}','{timestamp_mysql}')"
     cursor.execute(query)
 
-    chunks = split_file(os.path.join(uploads_dir, input_file_name), worker_count)
+    chunks = split_file(os.path.join(uploads_dir, input_file_name))
 
     for i in range(len(chunks)):
         task = {"job_file_name": job_file_name, "input_file_name": chunks[i], "job_znode":job_name, "mode":"map"}
@@ -98,32 +92,51 @@ def add_task(_data, _job_path, _index, _job_name, _mode):
         pass
     return task_name
 
-def split_file(file_path, num_chunks):
-    
+def split_file(file_path):
+    chunk_size_bytes = 64 * 1024 * 1024  # 64MB
+
     tz = pytz.timezone('Europe/Athens')
     now = datetime.datetime.now(tz)
     timestamp = now.strftime("%H_%M_%S_%d_%m_%Y")
 
-    with open(file_path, 'r') as f:
-        lines = f.readlines()
-
-    num_lines = len(lines)
-    lines_per_chunk = num_lines // num_chunks
-
     files = []
-
     basename = os.path.basename(file_path)
     prefix = os.path.splitext(basename)[0]
 
-    for i in range(num_chunks):
-        start_idx = i * lines_per_chunk
-        end_idx = (i+1) * lines_per_chunk if i < num_chunks-1 else num_lines
-        chunk = lines[start_idx:end_idx]
+    current_chunk_lines = []
+    current_chunk_size = 0
+    chunk_num = 1
 
-        with open(os.path.dirname(__file__)+'/../shared/'+timestamp+"_"+prefix+'_chunk_'+str(i+1)+'.txt', 'w')as f:
-            f.writelines(chunk)
-            files.append(timestamp+"_"+prefix+'_chunk_'+str(i+1)+'.txt')
-    
+    with open(file_path, 'rb') as f:
+        for line in f:
+            line_size_bytes = len(line)
+
+            if current_chunk_size + line_size_bytes > chunk_size_bytes:
+                chunk_file_name = timestamp + "_" + prefix + '_chunk_' + str(chunk_num) + '.txt'
+                chunk_file_path = os.path.join(os.path.dirname(__file__), '..', 'shared', chunk_file_name)
+
+                with open(chunk_file_path, 'wb') as chunk_file:
+                    chunk_file.write(b''.join(current_chunk_lines))
+
+                files.append(chunk_file_name)
+
+                current_chunk_lines = []
+                current_chunk_size = 0
+                chunk_num += 1
+
+            current_chunk_lines.append(line)
+            current_chunk_size += line_size_bytes
+
+    # Write the last chunk if any remaining lines
+    if current_chunk_lines:
+        chunk_file_name = timestamp + "_" + prefix + '_chunk_' + str(chunk_num) + '.txt'
+        chunk_file_path = os.path.join(os.path.dirname(__file__), '..', 'shared', chunk_file_name)
+
+        with open(chunk_file_path, 'wb') as chunk_file:
+            chunk_file.write(b''.join(current_chunk_lines))
+
+        files.append(chunk_file_name)
+
     return files
 
 #------------------------------------------------------

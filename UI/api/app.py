@@ -2,6 +2,7 @@ from flask import Flask, jsonify, render_template, request, redirect, make_respo
 import subprocess, json, os, datetime, requests, jwt, pytz
 import mysql.connector
 
+
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.secret_key = "session_secret"
