@@ -17,6 +17,9 @@
 *4. Run `make nginx`* <br>
 *6. Done*
 
+# *Sample Job Files*
+* *You can find a sample job, input file in the job_samples folder*
 
 # *Service Diagram Docker*
 ![alt text](https://github.com/git-egi/PLH-419/blob/main/Diagrams/service_diagram_docker.drawio.png?raw=true)
+
